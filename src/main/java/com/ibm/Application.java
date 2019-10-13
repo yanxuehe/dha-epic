@@ -122,6 +122,7 @@ public class Application {
                     //.wireTap("direct:websocket")
                     .marshal().json(JsonLibrary.Jackson)
                     .log("Inserted new patient ${body}")
+                    .to("amq:queue:NEW_PATIENTS")
                     .wireTap("direct:websocket");
 
             from("direct:websocket").log("put ${body} to websocket").to("websocket:demo?sendToAll=true");
