@@ -1,0 +1,16 @@
+.apt_generated
+bin
+build
+.classpath
+derby.log
+.factorypath
+.idea
+*.iml
+out
+.project
+.settings
+*.settings
+.versionInfo
+target
+tmp
+lifecycle-mapping
