@@ -81,14 +81,14 @@ public class Application {
                     .outType(Patient.class).consumes("text/html").produces("application/json, application/xml").type(String.class)
                     .param().name("body").type(body).required(true).description("the patient in hl7 format").endParam()
                     .param().name("user_key").type(query).required(true).description("the user key").endParam()
-                    .responseMessage().code(200).endResponseMessage()
+                    .responseMessage().code(202).endResponseMessage()
                     .to("direct:registryPatient");
 
             from("direct:registryPatient").wireTap("amq:queue:PATIENTS_REGISTRY").to("direct:patientRegistered");
 
             from("direct:patientRegistered")
-                    .setHeader(Exchange.HTTP_RESPONSE_CODE, constant("302"))
-                    .setBody(constant("Patient Registered"));
+                    .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(202))
+                    .setBody(constant("Patient Accepted"));
 
             from("direct:allPatients")
                     .log("headers : ${headers}")
@@ -125,6 +125,7 @@ public class Application {
                     //.wireTap("direct:websocket")
                     .marshal().json(JsonLibrary.Jackson)
                     .log("Inserted new patient ${body}")
+                    .to("amq:queue:NEW_PATIENTS")
                     .wireTap("direct:websocket");
 
             from("direct:websocket").log("put ${body} to websocket").to("websocket:demo?sendToAll=true");
