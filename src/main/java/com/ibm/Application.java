@@ -65,6 +65,7 @@ public class Application {
                     .apiProperty("api.version", "1.0")
                     .apiProperty("cors", "true")
                     .apiProperty("host", "abc.net")
+                    .host("0.0.0.0")
                     .port(8080);
                     // .host("abc.com")
                     // env.getProperty("server.port", "9001")
@@ -95,6 +96,8 @@ public class Application {
                     .to("direct:response");
 
             from("direct:convertLFToCR")
+                    //.log("delay 5 seconds")
+                    //.delay(5000)
                     .log("Accepted body ${body}")
                     .log("converting LFT 2 CR")
                     .transform(convertLFToCR())
