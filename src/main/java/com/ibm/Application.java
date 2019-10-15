@@ -95,13 +95,13 @@ public class Application {
                     .outType(Patient[].class).produces("application/json, application/xml")
                     .param().name("user_key").type(query).defaultValue("Your_User_Key").required(true).description("the user key").endParam()
                     .responseMessage().code(200).endResponseMessage()
-                    .to("direct:allPatients")
+                    .route().to("direct:allPatients").endRest()
                     .post("/registry").description("Registry a Patient")
                     .outType(Patient.class).consumes("text/html").produces("application/json, application/xml").type(String.class)
                     .param().name("body").type(body).required(true).description("the patient in hl7 format").endParam()
                     .param().name("user_key").type(query).defaultValue("Your_User_Key").required(true).description("the user key").endParam()
-                    .responseMessage().code(202).endResponseMessage()
-                    .to("direct:registryPatient");
+                    .responseMessage().code(202).endResponseMessage().route()
+                    .to("direct:registryPatient").endRest();
 
             from("direct:registryPatient").wireTap("amq:queue:PATIENTS_REGISTRY").to("direct:patientRegistered");
 
