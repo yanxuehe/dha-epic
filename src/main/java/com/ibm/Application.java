@@ -147,7 +147,7 @@ public class Application {
                     .to("amq:queue:NEW_PATIENTS")
                     .wireTap("direct:websocket");
 
-            from("direct:websocket").log("put ${body} to websocket").to("websocket:demo?sendToAll=true");
+            from("direct:websocket").log("put ${body} to websocket").to("websocket:newPatients?sendToAll=true");
 
             from("amq:queue:PATIENTS_REGISTRY").to("direct:convertLFToCR");
 

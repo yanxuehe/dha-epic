@@ -167,10 +167,18 @@ objects:
     name: ${APP_NAME}
   spec:
     ports:
-    - name: http
+    - name: rest-http
       port: 8080
       protocol: TCP
       targetPort: 8080
+    - name: springboot-http
+      port: 9001
+      protocol: TCP
+      targetPort: 9001
+    - name: websocket
+      port: 9292
+      protocol: TCP
+      targetPort: 9292
     selector:
       app: ${APP_NAME}
       component: ${APP_NAME}
@@ -264,7 +272,7 @@ parameters:
   value: 0.8G
 - description: The service name for AMQ
   name: A_MQ_SERVICE_NAME
-  value: BROKER_AMQ_TCP
+  value: broker-amq-tcp
 - description: The service name for AMQ
   name: A_MQ_SERVICE_USER
   value: admin
