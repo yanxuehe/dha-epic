@@ -97,7 +97,7 @@ public class Application {
                     .responseMessage().code(200).endResponseMessage()
                     .route().to("direct:allPatients").endRest()
                     .post("/registry").description("Registry a Patient")
-                    .outType(Patient.class).consumes("text/html").produces("application/json, application/xml").type(String.class)
+                    .outType(String.class).consumes("text/html").produces("application/json, application/xml").type(String.class)
                     .param().name("body").type(body).required(true).description("the patient in hl7 format").endParam()
                     .param().name("user_key").type(query).defaultValue("Your_User_Key").required(true).description("the user key").endParam()
                     .responseMessage().code(202).endResponseMessage().route()
