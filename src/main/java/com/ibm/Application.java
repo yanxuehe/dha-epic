@@ -79,7 +79,7 @@ public class Application {
                     .apiProperty("api.title", "DHA EPIC Rest APIs")
                     .apiProperty("api.version", "1.0")
                     .apiProperty("cors", "true")
-                    .apiProperty("host", "abc.net")
+                    .apiProperty("host", "api-dha-epic.e4ff.pro-eu-west-1.openshiftapps.com")
                     .enableCORS(true)
                     .corsHeaderProperty("Access-Control-Allow-Origin", "*")
                     .corsHeaderProperty("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, CONNECT, PATCH")
