@@ -36,6 +36,8 @@ public class HL7MessageProcessor {
                 }
             }
 
+        } else {
+            throw new Exception("Not Supported HL7 version.");
         }
 
         return msg;
@@ -63,12 +65,12 @@ public class HL7MessageProcessor {
                 lastname = xpn.getFamilyName().getSurname().getValue();
                 log.info("the name of Patient[{}] is {}, {}", patientID, lastname, firstname);
 
-                p = new Patient();
-                p.setFirstName(firstname);
-                p.setLastName(lastname);
-                p.setPid(patientID);
-                p.setFacility(facility);
-                p.setApp(app);
+                p = new Patient()
+                        .withApp(app)
+                        .withFacility(facility)
+                        .withFirstName(firstname)
+                        .withLastName(lastname)
+                        .withPid(patientID);
 
             }
         }

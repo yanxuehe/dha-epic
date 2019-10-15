@@ -15,14 +15,18 @@
  */
 package com.ibm;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.camel.Exchange;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.stereotype.Component;
 
 import static org.apache.camel.component.hl7.HL7.convertLFToCR;
@@ -33,11 +37,22 @@ import static org.apache.camel.model.rest.RestParamType.query;
  * A spring-boot application that includes a Camel route builder to setup the Camel routes
  */
 @SpringBootApplication
-@ImportResource({"classpath:spring/amq.xml","classpath:spring/camel-context.xml"})
+@ImportResource({"classpath:spring/amq.xml"})
+@EnableJpaAuditing
 public class Application {
 
     @Autowired
     private Environment env;
+
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer customizer() {
+        return builder -> {
+            builder
+                    .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                    .indentOutput(true)
+                    .simpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        };
+    }
 
     // must have a main method spring-boot can run
     public static void main(String[] args) {
@@ -65,19 +80,23 @@ public class Application {
                     .apiProperty("api.version", "1.0")
                     .apiProperty("cors", "true")
                     .apiProperty("host", "abc.net")
+                    .enableCORS(true)
+                    .corsHeaderProperty("Access-Control-Allow-Origin", "*")
+                    .corsHeaderProperty("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, CONNECT, PATCH")
+                    .corsHeaderProperty("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers")
                     .host("0.0.0.0")
                     .port(8080);
-                    // .host("abc.com")
-                    // env.getProperty("server.port", "9001")
-                    //.bindingMode(RestBindingMode.auto);
+            // .host("abc.com")
+            // env.getProperty("server.port", "9001")
+            //.bindingMode(RestBindingMode.auto);
 
             rest("/patients").description("Patients Service")
-                .get("/").description("The list of all the patients")
+                    .get("/").description("The list of all the patients")
                     .outType(Patient[].class).produces("application/json, application/xml")
                     .param().name("user_key").type(query).required(true).description("the user key").endParam()
                     .responseMessage().code(200).endResponseMessage()
                     .to("direct:allPatients")
-                .post("/registry").description("Registry a Patient")
+                    .post("/registry").description("Registry a Patient")
                     .outType(Patient.class).consumes("text/html").produces("application/json, application/xml").type(String.class)
                     .param().name("body").type(body).required(true).description("the patient in hl7 format").endParam()
                     .param().name("user_key").type(query).required(true).description("the user key").endParam()
@@ -133,12 +152,12 @@ public class Application {
             from("amq:queue:PATIENTS_REGISTRY").to("direct:convertLFToCR");
 
             from("direct:response")
-                .choice()
-                .when(header("Accept").contains("application/xml"))
+                    .choice()
+                    .when(header("Accept").contains("application/xml"))
                     .marshal().jacksonxml().endChoice()
-                .when(header("Accept").contains("application/json"))
+                    .when(header("Accept").contains("application/json"))
                     .marshal().json(JsonLibrary.Jackson).endChoice()
-                .otherwise().marshal().json(JsonLibrary.Jackson);
+                    .otherwise().marshal().json(JsonLibrary.Jackson);
 
         }
     }
