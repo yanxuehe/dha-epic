@@ -192,7 +192,7 @@ parameters:
   displayName: Git Repository URL
   name: GIT_REPO
   required: true
-  value: https://github.com/openshift-demo/healthcaredemos2i.git
+  value: https://github.com/yanxuehe/dha-epic.git
 - description: Set this to a branch name, tag or other ref of your repository if you
     are not using the default branch.
   displayName: Git Reference
