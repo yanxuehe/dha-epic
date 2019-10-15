@@ -93,13 +93,13 @@ public class Application {
             rest("/patients").description("Patients Service")
                     .get("/").description("The list of all the patients")
                     .outType(Patient[].class).produces("application/json, application/xml")
-                    .param().name("user_key").type(query).required(true).description("the user key").endParam()
+                    .param().name("user_key").type(query).defaultValue("Your_User_Key").required(true).description("the user key").endParam()
                     .responseMessage().code(200).endResponseMessage()
                     .to("direct:allPatients")
                     .post("/registry").description("Registry a Patient")
                     .outType(Patient.class).consumes("text/html").produces("application/json, application/xml").type(String.class)
                     .param().name("body").type(body).required(true).description("the patient in hl7 format").endParam()
-                    .param().name("user_key").type(query).required(true).description("the user key").endParam()
+                    .param().name("user_key").type(query).defaultValue("Your_User_Key").required(true).description("the user key").endParam()
                     .responseMessage().code(202).endResponseMessage()
                     .to("direct:registryPatient");
 
