@@ -116,6 +116,16 @@ objects:
                   value: ${A_MQ_SERVICE_USER}
                 - name: A_MQ_SERVICE_PSWD
                   value: ${A_MQ_SERVICE_PSWD}
+                - name: MYSQL_SERVICE_NAME
+                  value: ${MYSQL_SERVICE_NAME}
+                - name: MYSQL_SERVICE_PORT
+                  value: ${MYSQL_SERVICE_PORT}
+                - name: MYSQL_SERVICE_DATABASE
+                  value: ${MYSQL_SERVICE_DATABASE}
+                - name: MYSQL_USERNAME
+                  value: ${MYSQL_USERNAME}
+                - name: MYSQL_PASSWORD
+                  value: ${MYSQL_PASSWORD}
                 - name: KUBERNETES_NAMESPACE
                   valueFrom:
                     fieldRef:
@@ -272,9 +282,24 @@ parameters:
   - description: The service name for AMQ
     name: A_MQ_SERVICE_NAME
     value: broker-amq-tcp
-  - description: The service name for AMQ
+  - description: The service user for AMQ
     name: A_MQ_SERVICE_USER
     value: admin
-  - description: The service name for AMQ
+  - description: The service password for AMQ
     name: A_MQ_SERVICE_PSWD
     value: admin
+  - description: The service name for MySQL
+    name: MYSQL_SERVICE_NAME
+    value: mysql
+  - description: The service port for MySQL
+    name: MYSQL_SERVICE_PORT
+    value: 3306
+  - description: The service db name for MySQL
+    name: MYSQL_SERVICE_DATABASE
+    value: epic
+  - description: The service username for MySQL
+    name: MYSQL_USERNAME
+    value:
+  - description: The service password for MySQL
+    name: MYSQL_PASSWORD
+    value:
