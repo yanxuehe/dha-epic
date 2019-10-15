@@ -159,19 +159,18 @@ objects:
       labels:
         app: ${APP_NAME}
         component: ${APP_NAME}
-        container: java
+        deploymentconfig: ${APP_NAME}
         group: healthcare
-        project: ${APP_NAME}
         provider: s2i
         version: ${APP_VERSION}
       name: ${APP_NAME}
     spec:
       ports:
-        - name: rest-http
+        - name: http-8080
           port: 8080
           protocol: TCP
           targetPort: 8080
-        - name: springboot-http
+        - name: http-9001
           port: 9001
           protocol: TCP
           targetPort: 9001
@@ -184,7 +183,6 @@ objects:
         component: ${APP_NAME}
         deploymentconfig: ${APP_NAME}
         group: healthcare
-        project: ${APP_NAME}
         provider: s2i
         version: ${APP_VERSION}
       sessionAffinity: None
@@ -218,7 +216,7 @@ parameters:
   - description: The application version.
     displayName: Application Version
     name: APP_VERSION
-    value: 1.0.0-SNAPSHOT
+    value: 1.0.0.fuse-720019
   - description: Arguments passed to mvn in the build.
     displayName: Maven Arguments
     name: MAVEN_ARGS
