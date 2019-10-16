@@ -97,7 +97,7 @@ public class Application {
                     .param().name("user_key").type(query).defaultValue("Your_User_Key").required(true).description("the user key").endParam()
                     .responseMessage().code(200).endResponseMessage()
                     .route()
-                    .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(202))
+                    .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
                     .setBody(constant("SUCCESS"))
                     .endRest();
             rest("/patients").description("Patients Service")
