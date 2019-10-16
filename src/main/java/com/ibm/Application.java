@@ -79,6 +79,7 @@ public class Application {
                     .apiProperty("api.title", "DHA EPIC Rest APIs")
                     .apiProperty("api.version", "1.0")
                     .apiProperty("cors", "true")
+                    .apiProperty("schemes","https")
                     .apiProperty("host", "api-dha-epic.e4ff.pro-eu-west-1.openshiftapps.com")
                     .enableCORS(true)
                     .corsHeaderProperty("Access-Control-Allow-Origin", "*")
@@ -92,8 +93,7 @@ public class Application {
 
             rest()
                     .get("/validate").description("validate the api is available")
-                    .outType(String.class)
-                    .consumes("text/html").produces("text/html").type(String.class)
+                    .outType(String.class).produces("text/html")
                     .param().name("user_key").type(query).defaultValue("Your_User_Key").required(true).description("the user key").endParam()
                     .responseMessage().code(200).endResponseMessage()
                     .route()
