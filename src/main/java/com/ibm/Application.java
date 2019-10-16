@@ -90,7 +90,7 @@ public class Application {
             // env.getProperty("server.port", "9001")
             //.bindingMode(RestBindingMode.auto);
 
-            rest("/")
+            rest()
                     .get("/validate").description("validate the api is available")
                     .outType(String.class)
                     .consumes("text/html").produces("text/html").type(String.class)
