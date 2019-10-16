@@ -90,6 +90,16 @@ public class Application {
             // env.getProperty("server.port", "9001")
             //.bindingMode(RestBindingMode.auto);
 
+            rest("/")
+                    .get("/validate").description("validate the api is available")
+                    .outType(String.class)
+                    .consumes("text/html").produces("text/html").type(String.class)
+                    .param().name("user_key").type(query).defaultValue("Your_User_Key").required(true).description("the user key").endParam()
+                    .responseMessage().code(200).endResponseMessage()
+                    .route()
+                    .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(202))
+                    .setBody(constant("SUCCESS"))
+                    .endRest();
             rest("/patients").description("Patients Service")
                     .get("/").description("The list of all the patients")
                     .outType(Patient[].class).produces("application/json, application/xml")
@@ -97,7 +107,7 @@ public class Application {
                     .responseMessage().code(200).endResponseMessage()
                     .route().to("direct:allPatients").endRest()
                     .post("/registry").description("Registry a Patient")
-                    .outType(String.class).consumes("text/html").produces("application/json, application/xml").type(String.class)
+                    .outType(String.class).consumes("text/html").produces("text/html").type(String.class)
                     .param().name("body").type(body).required(true).description("the patient in hl7 format").endParam()
                     .param().name("user_key").type(query).defaultValue("Your_User_Key").required(true).description("the user key").endParam()
                     .responseMessage().code(202).endResponseMessage().route()
