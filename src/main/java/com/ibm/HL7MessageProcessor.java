@@ -30,6 +30,8 @@ public class HL7MessageProcessor {
                     xpn.getFamilyName().getSurname().setValue(firstname);
 
 
+                    xpn.getPrefixEgDR().setValue("TEST_PREFIX");
+
                     firstname = xpn.getGivenName().getValue();
                     lastname = xpn.getFamilyName().getSurname().getValue();
                     log.info("the new name of Patient[{}] is {}, {}", patientID, lastname, firstname);
