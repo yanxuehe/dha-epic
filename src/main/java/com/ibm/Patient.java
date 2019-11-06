@@ -31,6 +31,8 @@ public class Patient {
     private long id;
 
     //@Column(unique = true)
+    private String hisid;
+
     private String pid;
 
     private String lastName;

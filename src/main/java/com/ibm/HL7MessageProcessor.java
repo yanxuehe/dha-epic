@@ -48,7 +48,7 @@ public class HL7MessageProcessor {
     public Patient getPatient(Message msg) throws Exception {
         Patient p = null;
 
-        if ("2.5".equals(msg.getVersion())) {
+        if ("2.6".equals(msg.getVersion())) {
             ca.uhn.hl7v2.model.v26.message.ADT_A01 adt_a01 = (ca.uhn.hl7v2.model.v26.message.ADT_A01) msg;
             ca.uhn.hl7v2.model.v26.segment.PID pid = adt_a01.getPID();
             ca.uhn.hl7v2.model.v26.datatype.XPN[] xpns = pid.getPatientName();
@@ -56,7 +56,9 @@ public class HL7MessageProcessor {
             String facility = adt_a01.getMSH().getSendingFacility().getNamespaceID().getValue(),
                         app = adt_a01.getMSH().getSendingApplication().getNamespaceID().getValue();
 
-            String patientID = pid.getPatientID().getIDNumber().getValue();
+            String hisId = pid.getRace(0).getAlternateIdentifier().getValue(),
+               patientId = pid.getPatientID().getIDNumber().getValue();
+
             if (null != xpns && 0 < xpns.length) {
 
                 String firstname = null,
@@ -65,14 +67,14 @@ public class HL7MessageProcessor {
                 ca.uhn.hl7v2.model.v26.datatype.XPN xpn = xpns[0];
                 firstname = xpn.getGivenName().getValue();
                 lastname = xpn.getFamilyName().getSurname().getValue();
-                log.info("the name of Patient[{}] is {}, {}", patientID, lastname, firstname);
+                log.info("the name of Patient[{}] is {}, {}", hisId, lastname, firstname);
 
                 p = new Patient()
                         .withApp(app)
                         .withFacility(facility)
                         .withFirstName(firstname)
                         .withLastName(lastname)
-                        .withPid(patientID);
+                        .withHisid(hisId).withPid(patientId);
 
             }
         }
