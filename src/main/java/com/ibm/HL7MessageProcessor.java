@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 public class HL7MessageProcessor {
 
     public Message newName(Message msg) throws Exception {
-        if ("2.5".equals(msg.getVersion())) {
-            ca.uhn.hl7v2.model.v25.message.ADT_A01 adt_a01 = (ca.uhn.hl7v2.model.v25.message.ADT_A01) msg;
-            ca.uhn.hl7v2.model.v25.segment.PID pid = adt_a01.getPID();
-            ca.uhn.hl7v2.model.v25.datatype.XPN[] xpns = pid.getPatientName();
+        if ("2.6".equals(msg.getVersion())) {
+            ca.uhn.hl7v2.model.v26.message.ADT_A01 adt_a01 = (ca.uhn.hl7v2.model.v26.message.ADT_A01) msg;
+            ca.uhn.hl7v2.model.v26.segment.PID pid = adt_a01.getPID();
+            ca.uhn.hl7v2.model.v26.datatype.XPN[] xpns = pid.getPatientName();
 
             String patientID = pid.getPatientID().getIDNumber().getValue();
             if (null != xpns && 0 < xpns.length) {
@@ -21,7 +21,7 @@ public class HL7MessageProcessor {
                 String firstname = null,
                         lastname = null;
 
-                for (ca.uhn.hl7v2.model.v25.datatype.XPN xpn : xpns) {
+                for (ca.uhn.hl7v2.model.v26.datatype.XPN xpn : xpns) {
                     firstname = xpn.getGivenName().getValue();
                     lastname = xpn.getFamilyName().getSurname().getValue();
                     log.info("the original name of Patient[{}] is {}, {}", patientID, lastname, firstname);
@@ -49,9 +49,9 @@ public class HL7MessageProcessor {
         Patient p = null;
 
         if ("2.5".equals(msg.getVersion())) {
-            ca.uhn.hl7v2.model.v25.message.ADT_A01 adt_a01 = (ca.uhn.hl7v2.model.v25.message.ADT_A01) msg;
-            ca.uhn.hl7v2.model.v25.segment.PID pid = adt_a01.getPID();
-            ca.uhn.hl7v2.model.v25.datatype.XPN[] xpns = pid.getPatientName();
+            ca.uhn.hl7v2.model.v26.message.ADT_A01 adt_a01 = (ca.uhn.hl7v2.model.v26.message.ADT_A01) msg;
+            ca.uhn.hl7v2.model.v26.segment.PID pid = adt_a01.getPID();
+            ca.uhn.hl7v2.model.v26.datatype.XPN[] xpns = pid.getPatientName();
 
             String facility = adt_a01.getMSH().getSendingFacility().getNamespaceID().getValue(),
                         app = adt_a01.getMSH().getSendingApplication().getNamespaceID().getValue();
@@ -62,7 +62,7 @@ public class HL7MessageProcessor {
                 String firstname = null,
                         lastname = null;
 
-                ca.uhn.hl7v2.model.v25.datatype.XPN xpn = xpns[0];
+                ca.uhn.hl7v2.model.v26.datatype.XPN xpn = xpns[0];
                 firstname = xpn.getGivenName().getValue();
                 lastname = xpn.getFamilyName().getSurname().getValue();
                 log.info("the name of Patient[{}] is {}, {}", patientID, lastname, firstname);
