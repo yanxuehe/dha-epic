@@ -43,6 +43,8 @@ objects:
           memory: '${BUILD_MEMORY_REQUEST}'
       source:
         contextDir: '${CONTEXT_DIR}'
+        sourceSecret:
+          name: 'sam-at-github'
         git:
           ref: '${GIT_REF}'
           uri: '${GIT_REPO}'
@@ -204,12 +206,12 @@ parameters:
     displayName: 'Application Name'
     name: APP_NAME
     required: true
-    value: dha-epic
+    value: emr-data-hub
   - description: 'The URL of the repository with your application source code.'
     displayName: 'Git Repository URL'
     name: GIT_REPO
     required: true
-    value: 'https://github.com/yanxuehe/dha-epic.git'
+    value: 'https://github.ibm.com/redhatpoc/emr-data-hub.git'
   - description: "Set this to a branch name, tag or other ref of your repository if you\nare not using the default branch."
     displayName: 'Git Reference'
     name: GIT_REF
