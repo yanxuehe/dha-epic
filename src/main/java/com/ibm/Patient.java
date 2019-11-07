@@ -1,49 +1,57 @@
 package com.ibm;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.With;
+import com.google.common.collect.Sets;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.time.Instant;
+import java.util.Set;
 
 @Entity
-@Table(name = "patients")
+@Table(name = "t_patients")
 //@NamedQuery(name = "", query = "from Patient")
 @Data
 @With
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
+@EqualsAndHashCode(callSuper = true)
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Patient {
-
-    @Id
-    @GeneratedValue
-    private long id;
-
+public class Patient extends AuditEntity {
     //@Column(unique = true)
     private String hisid;
-
     private String pid;
-
     private String lastName;
     private String firstName;
-
     private String facility;
-    @With private String app;
+    private String app;
 
-    @CreatedDate
-    //pattern = "yyyy-MM-dd HH:mm a z"
-    @JsonSerialize(using = MyInstantSerializer.class)
-    private Instant createAt;
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<OBX> obxes;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<OBR> obrs;
+
+    public void addOBX(OBX obx) {
+        if (null == this.obxes) {
+            this.obxes = Sets.newHashSet();
+        }
+        this.obxes.add(obx);
+    }
+
+    public void addOBR(OBR obr) {
+        if (null == this.obrs) {
+            this.obrs = Sets.newHashSet();
+        }
+        this.obrs.add(obr);
+    }
+
+    public boolean isNew() {
+        return hisid == null && pid == null && lastName == null && firstName == null && facility == null && app == null && obxes == null && obrs == null;
+    }
 }

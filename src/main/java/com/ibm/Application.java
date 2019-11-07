@@ -17,6 +17,7 @@ package com.ibm;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.camel.Exchange;
+import org.apache.camel.LoggingLevel;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.spring.SpringRouteBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +80,7 @@ public class Application {
                     .apiProperty("api.title", "DHA EPIC Rest APIs")
                     .apiProperty("api.version", "1.0")
                     .apiProperty("cors", "true")
-                    .apiProperty("schemes","https")
+                    .apiProperty("schemes", "https")
                     .apiProperty("host", "api-dha-epic.e4ff.pro-eu-west-1.openshiftapps.com")
                     .enableCORS(true)
                     .corsHeaderProperty("Access-Control-Allow-Origin", "*")
@@ -145,7 +146,10 @@ public class Application {
 
             from("direct:getPatient")
                     .bean(HL7MessageProcessor.class, "getPatient")
-                    .to("direct:persistPatient");
+                    .choice()
+                    .when(body().isNotNull()).to("direct:persistPatient")
+                    .otherwise().log(LoggingLevel.WARN, "patient is null")
+                    .endChoice();
 
             from("direct:persistPatient")
                     //.bean(Database.class, "registry(${body})")
